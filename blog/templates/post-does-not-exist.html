@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block head_title %}{{ page.title }}{% endblock %}
+
+{% block body_class %}blog-post{% endblock %}
+
+{% block search %}
+{% include 'header-home-search.html' %}
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-12">
+			<h1>Post does not exist</h1>
+		</div>
+	</div>
+{% endblock %}
