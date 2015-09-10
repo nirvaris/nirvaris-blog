@@ -54,4 +54,8 @@ coverage.xml
 docs/_build/
 
 # PyBuilder
-target/
+targeit/
+
+.DS_Store
+*.sqlite*
+
