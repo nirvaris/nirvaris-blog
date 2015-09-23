@@ -21,7 +21,7 @@ class MetaTag(models.Model):
     name = models.CharField(max_length=70)
     property = models.CharField(max_length=70, null=True, blank=True)
     content  = models.CharField(max_length=70, null=True, blank=True)
-    post = models.ForeignKey('Post')
+    post = models.ForeignKey('Post', related_name='meta_tags')
 
     def __str__(self):
         return self.name
