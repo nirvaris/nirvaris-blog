@@ -20,7 +20,53 @@ class PostViewTestCase(TestCase):
 
     def tearDown(self):
         ...                  
+   
+    def test_post_new_comment_with_author(self):
+        
+        c = self.c
+        
+        post_content = 'If you know him as long as I know, you know his name is John'
+        
+        response = c.post('/blog/nice_post_cook', {
+            'name':'John Daniels',
+            'email': 'john@daniels.com',
+            'post_id': self.post_cook.id,
+            'content': post_content,
+        })        
     
+        self.assertIn(post_content, str(response.content)) 
+        
+        self.assertTrue(User.objects.all().count()>=2)
+            
+    def test_post_new_comment_with_author(self):
+        
+        c = self.c
+        
+        post_content = 'This is a comment from Jack Daniels already in the DB'
+        
+        response = c.post('/blog/nice_post_cook', {
+            'email': 'jack@daniels.com',
+            'post_id': self.post_cook.id,
+            'content': post_content,
+        })        
+    
+        self.assertIn(post_content, str(response.content)) 
+        
+        self.assertTrue(User.objects.all().count()<=1)
+        
+    def test_post_new_comment_no_author(self):
+        
+        c = self.c
+        
+        post_content = 'This is a comment posted via comment form'
+        
+        response = c.post('/blog/nice_post_cook', {
+            'post_id':self.post_cook.id,
+            'content': post_content,
+        })        
+    
+        self.assertIn(post_content, str(response.content)) 
+        
     def test_get_comment_with_author(self):
         
         comment = Comment(author=self.excited_comment_user, post=self.post_cook, content='A comment from an Excited user')

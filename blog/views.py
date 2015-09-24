@@ -20,7 +20,9 @@ class PostView(View):
             post.access_count += 1
             post.save()
             form_initial = {'post_id': post.id}
+            
             #pdb.set_trace()
+            
             if request.user.is_authenticated():
                 form_initial['email'] = request.user.email
                 form_initial['name'] = request.user.get_full_name()
