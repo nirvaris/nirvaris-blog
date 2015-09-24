@@ -39,7 +39,7 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, related_name='post_comments') 
     content = models.TextField(null=False)
     created = models.DateTimeField(auto_now_add=True)
-    
+    is_approved = models.BooleanField(default=False)
     def __str__(self):
         if self.author:
             return self.author.get_full_name()

@@ -20,9 +20,30 @@ class PostViewTestCase(TestCase):
 
     def tearDown(self):
         ...                  
-   
-    def test_post_new_comment_with_author(self):
+
+    def test_post_new_comment_existing_author(self):
         
+        total_comments = Comment.objects.all().count()
+        total_users = User.objects.all().count()
+        c = self.c
+        
+        post_content = 'If you know him as long as I know, you know his name is John'
+        
+        response = c.post('/blog/nice_post_cook', {
+            'name':'John Daniels',
+            'email': 'excited@comment.user.com',
+            'post_id': self.post_cook.id,
+            'content': post_content,
+        })        
+    
+        self.assertEquals(total_comments+1,Comment.objects.all().count())
+        
+        self.assertEquals(total_users,User.objects.all().count())
+  
+    def test_post_new_comment_new_author(self):
+        
+        total_comments = Comment.objects.all().count()
+        total_users = User.objects.all().count()
         c = self.c
         
         post_content = 'If you know him as long as I know, you know his name is John'
@@ -34,25 +55,41 @@ class PostViewTestCase(TestCase):
             'content': post_content,
         })        
     
-        self.assertIn(post_content, str(response.content)) 
+        self.assertEquals(total_comments+1,Comment.objects.all().count())
         
-        self.assertTrue(User.objects.all().count()>=2)
-            
-    def test_post_new_comment_with_author(self):
-        
+        self.assertEquals(total_users+1,User.objects.all().count())
+
+    def test_post_new_comment_with_name_no_email(self):
+
         c = self.c
+        
+        total_comments = Comment.objects.all().count()
         
         post_content = 'This is a comment from Jack Daniels already in the DB'
         
         response = c.post('/blog/nice_post_cook', {
-            'email': 'jack@daniels.com',
+            'name': 'No Email',
             'post_id': self.post_cook.id,
             'content': post_content,
         })        
     
-        self.assertIn(post_content, str(response.content)) 
+        self.assertEquals(total_comments,Comment.objects.all().count())
+           
+    def test_post_new_comment_with_email_no_name(self):
+
+        c = self.c
         
-        self.assertTrue(User.objects.all().count()<=1)
+        total_comments = Comment.objects.all().count()
+        
+        post_content = 'This is a comment from Jack Daniels already in the DB'
+        
+        response = c.post('/blog/nice_post_cook', {
+            'email': 'excited@comment.user.com',
+            'post_id': self.post_cook.id,
+            'content': post_content,
+        })        
+    
+        self.assertEquals(total_comments,Comment.objects.all().count())
         
     def test_post_new_comment_no_author(self):
         
