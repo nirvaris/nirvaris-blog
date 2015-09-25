@@ -93,6 +93,8 @@ class PostViewTestCase(TestCase):
         
     def test_post_new_comment_no_author(self):
         
+        total_comments = Comment.objects.all().count()
+        
         c = self.c
         
         post_content = 'This is a comment posted via comment form'
@@ -102,11 +104,27 @@ class PostViewTestCase(TestCase):
             'content': post_content,
         })        
     
-        self.assertIn(post_content, str(response.content)) 
+        self.assertEquals(total_comments+1,Comment.objects.all().count())
+        
+        response = c.get('/blog/nice_post_cook')       
+        
+        self.assertNotIn(post_content, str(response.content))
+
+    def test_get_comment_not_approved(self):
+        
+        comment = Comment(author=self.excited_comment_user,is_approved=False, post=self.post_cook, content='A comment from an Excited user')
+        comment.save()
+        
+        c = self.c
+
+        response = c.get('/blog/nice_post_cook')       
+        
+        self.assertNotIn(comment.content, str(response.content))
+
         
     def test_get_comment_with_author(self):
         
-        comment = Comment(author=self.excited_comment_user, post=self.post_cook, content='A comment from an Excited user')
+        comment = Comment(author=self.excited_comment_user,is_approved=True, post=self.post_cook, content='A comment from an Excited user')
         comment.save()
         
         c = self.c
@@ -118,7 +136,7 @@ class PostViewTestCase(TestCase):
             
     def test_get_comment_no_author(self):
         
-        comment = Comment(post=self.post_cook, content='some very nice comment comment')
+        comment = Comment(post=self.post_cook,is_approved=True, content='some very nice comment comment')
         comment.save()
         
         c = self.c

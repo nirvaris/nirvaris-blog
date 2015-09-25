@@ -11,7 +11,11 @@ class CommentForm(forms.ModelForm):
     name = forms.CharField(required=False, label=_('Name'), max_length=200)
     email = forms.EmailField(required=False, label=_('Email'), max_length=200)
     post_id = forms.CharField(required=True, widget=forms.HiddenInput())
-    
+
+    anti_spam_hidden = forms.CharField(required=True, widget=forms.HiddenInput())
+    anti_spam_no_hidden = forms.CharField()
+
+
     class Meta:
         model = Comment
         fields =[
