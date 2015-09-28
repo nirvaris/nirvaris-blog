@@ -1,4 +1,5 @@
 import pdb
+import uuid
 
 from django import forms
 from django.contrib.auth.models import User
@@ -6,25 +7,49 @@ from django.utils.translation import ugettext as _
 
 from .models import Comment
 
+
+
 class CommentForm(forms.ModelForm):
+
+    
 
     name = forms.CharField(required=False, label=_('Name'), max_length=200)
     email = forms.EmailField(required=False, label=_('Email'), max_length=200)
     post_id = forms.CharField(required=True, widget=forms.HiddenInput())
 
-    anti_spam_hidden = forms.CharField(required=True, widget=forms.HiddenInput())
-    anti_spam_no_hidden = forms.CharField()
+    anti_spam_token = forms.CharField(widget=forms.HiddenInput())
+    anti_spam_hidden = forms.CharField(widget=forms.HiddenInput())
+    anti_spam_no_hidden = forms.CharField(label='')
 
+    def __init__(self, *args, **kwargs):
+        
+        spam_token = uuid.uuid4()
+        
+        initial = kwargs.get('initial', {})
+        initial['anti_spam_token'] = str(spam_token)
+        initial['anti_spam_no_hidden'] = str(spam_token)   
+             
+        kwargs['initial'] = initial
+        super(CommentForm, self).__init__(*args, **kwargs)
 
+    
     class Meta:
         model = Comment
         fields =[
             'post_id' ,'name', 'email', 'content'
         ]
 
+    
+
     def clean(self):
         
         cleaned_data = super(CommentForm, self).clean()
+        
+        if cleaned_data['anti_spam_hidden'] != cleaned_data['anti_spam_token'] or 'anti_spam_no_hidden' in cleaned_data:
+            self.add_error(None,_('Are you human?'))
+            return cleaned_data            
+        
+        
         name = ''
         email = ''
         try:

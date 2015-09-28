@@ -1,3 +1,4 @@
+{% load form_script %}
 <head>
 {% if post.meta_tags %}
 	{% for meta_tag in post.meta_tags.all %}
@@ -23,9 +24,5 @@
 
 		</div>
 	</div>
-
-
-
-
-
+{% form_script %}
 
