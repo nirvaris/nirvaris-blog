@@ -19,35 +19,30 @@ class CommentForm(forms.ModelForm):
 
     anti_spam_token = forms.CharField(widget=forms.HiddenInput())
     anti_spam_hidden = forms.CharField(widget=forms.HiddenInput())
-    anti_spam_no_hidden = forms.CharField(label='')
+    anti_spam_no_hidden = forms.CharField(required=False,label='')
 
-    def __init__(self, *args, **kwargs):
-        
-        spam_token = uuid.uuid4()
-        
-        initial = kwargs.get('initial', {})
-        initial['anti_spam_token'] = str(spam_token)
-        initial['anti_spam_no_hidden'] = str(spam_token)   
-             
-        kwargs['initial'] = initial
-        super(CommentForm, self).__init__(*args, **kwargs)
 
-    
     class Meta:
         model = Comment
         fields =[
             'post_id' ,'name', 'email', 'content'
         ]
 
-    
-
+    def anti_spam(self):
+        
+        spam_token = uuid.uuid4()
+        
+        self.initial['anti_spam_token'] = str(spam_token)
+        self.initial['anti_spam_no_hidden'] = str(spam_token) 
+        self.initial['anti_spam_hidden'] = ''  
+                
     def clean(self):
         
         cleaned_data = super(CommentForm, self).clean()
-        
-        if cleaned_data['anti_spam_hidden'] != cleaned_data['anti_spam_token'] or 'anti_spam_no_hidden' in cleaned_data:
-            self.add_error(None,_('Are you human?'))
-            return cleaned_data            
+        #pdb.set_trace()
+        #if cleaned_data['anti_spam_hidden'] != cleaned_data['anti_spam_token'] or 'anti_spam_no_hidden' in cleaned_data:
+        #    self.add_error(None,_('Are you human?'))
+        #    return cleaned_data            
         
         
         name = ''

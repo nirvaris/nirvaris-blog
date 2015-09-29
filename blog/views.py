@@ -29,6 +29,7 @@ class PostView(View):
                 form_initial['name'] = request.user.get_full_name()
             
             form = CommentForm(initial=form_initial)
+            form.anti_spam()
             
             request_context = RequestContext(request,{'post':post,'form':form})
 
@@ -59,7 +60,9 @@ class PostView(View):
         if form_valid:
             form.save()
             form = CommentForm(initial={'post_id': post.id})
-
+        
+        form.anti_spam()
+        
         request_context = RequestContext(request,{'post':post,'form':form})
 
         return render_to_response(post.template, request_context)
