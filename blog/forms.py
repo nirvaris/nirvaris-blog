@@ -58,26 +58,28 @@ class CommentForm(forms.ModelForm):
                 self.add_error('name',_('You have to inform both, email and name, otherwise, leave both blank.'))
                 return cleaned_data
         
+        self.author = None
         if email != '':
             if User.objects.filter(email=email).exists():
-                self.instance.author = User.objects.get(email=email)
+                self.author = User.objects.get(email=email)
             else:
-                self.instance.author = User(username=email, email=email)
+                self.author = User(username=email, email=email)
 
             first_name = name.split(' ')[0].strip()
             last_name = name.replace(first_name, '').strip()
 
-            self.instance.author.first_name = first_name
-            self.instance.author.last_name = last_name
+            self.author.first_name = first_name
+            self.author.last_name = last_name
 
         self.instance.post_id = cleaned_data['post_id']
-
+        
         return cleaned_data
     
     def save(self, commit=True):
         
         if commit:
-            if self.instance.author:
-                self.instance.author.save()
+            if self.author:
+                self.author.save()
+                self.instance.author = self.author
             self.instance.save()
         
