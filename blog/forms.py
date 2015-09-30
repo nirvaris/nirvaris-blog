@@ -11,8 +11,6 @@ from .models import Comment
 
 class CommentForm(forms.ModelForm):
 
-    
-
     name = forms.CharField(required=False, label=_('Name'), max_length=200)
     email = forms.EmailField(required=False, label=_('Email'), max_length=200)
     post_id = forms.CharField(required=True, widget=forms.HiddenInput())
@@ -20,7 +18,6 @@ class CommentForm(forms.ModelForm):
     anti_spam_token = forms.CharField(widget=forms.HiddenInput())
     anti_spam_hidden = forms.CharField(widget=forms.HiddenInput())
     anti_spam_no_hidden = forms.CharField(required=False,label='')
-
 
     class Meta:
         model = Comment
