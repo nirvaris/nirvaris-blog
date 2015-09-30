@@ -15,7 +15,7 @@ class Post(models.Model):
     last_modified = models.DateTimeField(auto_now=True) 
 
     def __str__(self):
-        return self.relative_url
+        return self.title + ' (url: /' + self.relative_url + ')' 
         
 class MetaTag(models.Model):
     name = models.CharField(max_length=70)

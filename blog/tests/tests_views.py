@@ -34,6 +34,9 @@ class PostViewTestCase(TestCase):
             'email': 'excited@comment.user.com',
             'post_id': self.post_cook.id,
             'content': post_content,
+            'anti_spam_token':'1234',
+            'anti_spam_hidden':'1234',
+            'anti_spam_no_hidden':'',
         })        
     
         self.assertEquals(total_comments+1,Comment.objects.all().count())
@@ -46,18 +49,26 @@ class PostViewTestCase(TestCase):
         total_users = User.objects.all().count()
         c = self.c
         
-        post_content = 'If you know him as long as I know, you know his name is John'
+        post_content = 'If you know him as long as I do, you would know his name is John'
         
         response = c.post('/blog/nice_post_cook', {
             'name':'John Daniels',
             'email': 'john@daniels.com',
             'post_id': self.post_cook.id,
             'content': post_content,
+            'anti_spam_token':'1234',
+            'anti_spam_hidden':'1234',
+            'anti_spam_no_hidden':'',            
         })        
     
         self.assertEquals(total_comments+1,Comment.objects.all().count())
         
         self.assertEquals(total_users+1,User.objects.all().count())
+        
+        new_user = User.objects.latest('id')
+        new_comment = Comment.objects.latest('id')
+
+        self.assertEqual(new_user,new_comment.author)
 
     def test_post_new_comment_with_name_no_email(self):
 
@@ -71,6 +82,9 @@ class PostViewTestCase(TestCase):
             'name': 'No Email',
             'post_id': self.post_cook.id,
             'content': post_content,
+            'anti_spam_token':'1234',
+            'anti_spam_hidden':'1234',
+            'anti_spam_no_hidden':'',            
         })        
     
         self.assertEquals(total_comments,Comment.objects.all().count())
@@ -87,6 +101,9 @@ class PostViewTestCase(TestCase):
             'email': 'excited@comment.user.com',
             'post_id': self.post_cook.id,
             'content': post_content,
+            'anti_spam_token':'1234',
+            'anti_spam_hidden':'1234',
+            'anti_spam_no_hidden':'',            
         })        
     
         self.assertEquals(total_comments,Comment.objects.all().count())
@@ -102,6 +119,9 @@ class PostViewTestCase(TestCase):
         response = c.post('/blog/nice_post_cook', {
             'post_id':self.post_cook.id,
             'content': post_content,
+            'anti_spam_token':'1234',
+            'anti_spam_hidden':'1234',
+            'anti_spam_no_hidden':'',            
         })        
     
         self.assertEquals(total_comments+1,Comment.objects.all().count())

@@ -10,6 +10,6 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('post','author','content','is_approved','created')
     list_display = ('post','author','content','is_approved')
     list_editable = ('is_approved',)
-    
+    search_fields = ['content']
 
 admin.site.register(Comment, CommentAdmin)
