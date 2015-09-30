@@ -14,8 +14,21 @@ class PostAdmin(admin.ModelAdmin):
 
 admin.site.register(Post, PostAdmin)
 
-admin.site.register(MetaTag)
-admin.site.register(Tag)
+
+class MetaTagAdmin(admin.ModelAdmin):
+    list_filter = ('post','name','property','content')
+    list_display = ('post','name','property','content')
+    search_fields = ['name','property','content']
+    
+admin.site.register(MetaTag, MetaTagAdmin)
+
+
+class TagAdmin(admin.ModelAdmin):
+    list_filter = ('name',)
+    list_display = ('name',)
+    search_fields = ['name',]
+    
+admin.site.register(Tag,TagAdmin)
 
 class CommentAdmin(admin.ModelAdmin):
     list_filter = ('post','author','content','is_approved','created')
