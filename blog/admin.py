@@ -3,8 +3,8 @@ from django.contrib import admin
 from .models import Post, MetaTag, Tag, Comment
 
 class PostAdmin(admin.ModelAdmin):
-    list_filter = ('author','title','relative_url','access_count',)
-    list_display = ('author','title','relative_url','access_count',)
+    list_filter = ('author','title','relative_url','access_count','created')
+    list_display = ('author','title','relative_url','access_count','created')
     search_fields = ['title','relative_url','content']
 
 admin.site.register(Post, PostAdmin)
