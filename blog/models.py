@@ -35,11 +35,12 @@ class Tag(models.Model):
         return self.name
     
 class Comment(models.Model):
-    author = models.ForeignKey(User, null=True, related_name='post_comments') 
+    author = models.ForeignKey(User, null=True, blank=True, related_name='post_comments') 
     post = models.ForeignKey(Post, related_name='post_comments') 
     content = models.TextField(null=False)
     created = models.DateTimeField(auto_now_add=True)
-    is_approved = models.BooleanField(default=False)
+    last_modified = models.DateTimeField(auto_now=True)
+    is_approved = models.BooleanField(default=False)    
     def __str__(self):
         if self.author:
             return self.author.get_full_name()
