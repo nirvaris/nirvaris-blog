@@ -1,5 +1,6 @@
 include LICENSE
 include README.rst
 recursive-include blog/migrations *
+recursive-include blog/templatetags *
 recursive-include blog/templates *
 recursive-include docs *
