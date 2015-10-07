@@ -1,28 +1,82 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load form_style %}
 {% load form_script %}
-<head>
-{% if post.meta_tags %}
-	{% for meta_tag in post.meta_tags.all %}
-		<meta name="{{ meta_tag.name }}" property="{{ meta_tag.property }}" content="{{ meta_tag.content }}">
-	{% endfor %}
-{% endif %}
-</head>
+
+{% block head_title %}{{ page.title }}{% endblock %}
+
+{% block item-meta-tag %}
+{% include 'head-meta-item.html' with item=post %}
+{% endblock %}
+
+{% block content %}
 	<div class="row">
 		<div class="col-md-12">
-			{{ post.content|safe }}
-
-			<form method="POST" >{% csrf_token %}
-				{{ form }}
-				<input type="submit" value="submit">
-			</form>
-
-			{% for comment in post.post_comments.all %}
-				{% if comment.is_approved %}
-			<p>{{ comment.author.get_full_name }}</p>
-				<p>{{ comment.content }}</p>
-				{% endif %}
-			{% endfor %}
+			
+			<div class="row">
+				<div class="col-md-12">
+					<h2>{{ post.title }}</h2>
+					<p>{{ post.content|safe }}</p>
+					<div>
+						<p>Tags: 
+							{% for tag in post.tags.all %}
+								<span>{{ tag.name }}</span>
+							{% endfor %}
+						</p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-6">
+					<form method="POST" >{% csrf_token %}
+						<h4>Deixe um comentário</h4>
+						{{ form|form_style}}
+						<div class="form-group">
+							{# Translators: The submit button on the comments form. #}
+							<input class="btn btn-primary btn-lg btn-block" type="submit" value="{% trans 'Enviar' %}">
+						</div>
+					</form>
+				</div>
+			</div>
+						
+			
+			<div class="row">
+				<div class="col-md-12">
+					<h4>Comentários</h4>
+					<div class="comments-wrapper">
+						{% for comment in post.post_comments.all %}
+							
+							<ol class="comments-list">
+							{% if comment.is_approved %}
+								<li class="comment">
+									<div class="comment-wrapper">
+										<div class="comment-author">
+											<div class="comment-author-avatar">
+											<img src="" />
+											</div>
+											<div class="comment-author-name">
+												<p>{{ comment.author.get_full_name }}</p>
+												<p>{{ comment.created }}</p>
+											</div>
+										</div>
+										<div class="comment-content"><p>{{ comment.content }}</p></div>
+									</div>
+								</li>
+								{% endif %}
+							</ol>
+							
+						{% endfor %}
+					</div>
+				</div>
+			</div>
 
 		</div>
 	</div>
-{% form_script %}
+	{% form_script %}
+{% endblock %}
+
+
+
+
 
