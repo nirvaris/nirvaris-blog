@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "theme-base.html" %}
 {% load i18n %}
 {% load form_style %}
 {% load form_script %}
@@ -6,7 +6,7 @@
 {% block head_title %}{{ page.title }}{% endblock %}
 
 {% block item-meta-tag %}
-{% include 'head-meta-item.html' with item=post %}
+{% include 'theme-head-meta-item.html' with item=post %}
 {% endblock %}
 
 {% block content %}
