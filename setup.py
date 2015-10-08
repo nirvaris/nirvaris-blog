@@ -9,7 +9,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='nirvaris-blog',
-    version='0.8',
+    version='0.801',
     packages=['blog'],
     include_package_data=True,
     license='MIT License',  # example license
