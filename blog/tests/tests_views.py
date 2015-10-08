@@ -177,7 +177,13 @@ class PostViewTestCase(TestCase):
         
         self.assertTrue(any(self.post_cook.template in t.name for t in response.templates))
         
-        self.assertIn(self.post_cook.content, str(response.content))
+        content = str(response.content)
+        
+        self.assertIn(self.post_cook.content, content)
+        #pdb.set_trace()
+        
+        self.assertTrue(re.search(re.compile('<title>.*' + self.post_cook.title + '.*</title>'), content),
+        'page title does not match')
 
     def test_get_post_meta_tag(self):
     
