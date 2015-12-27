@@ -2,3 +2,5 @@ git+https://github.com/nirvaris/nirvaris-theme-default
 git+https://github.com/nirvaris/nirvaris-profile
 Django==1.9
 wheel==0.26.0
+django-smtp-ssl==1.0
+pycrypto==2.6.1
