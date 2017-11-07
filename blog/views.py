@@ -1,8 +1,7 @@
 import pdb
 
 
-from django.shortcuts import render, render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.views.generic.base import View
 # Create your views here.
 
@@ -31,9 +30,9 @@ class PostView(View):
             form = CommentForm(initial=form_initial)
             form.anti_spam()
 
-            request_context = RequestContext(request,{'post':post,'form':form})
+            data_context = {'post':post,'form':form}
 
-            return render_to_response(post.template, request_context)
+            return render(request, post.template, data_context)
 
         #pdb.set_trace()
 
@@ -44,9 +43,9 @@ class PostView(View):
         else:
             posts = Post.objects.all()
 
-        request_context = RequestContext(request,{'posts':posts})
+        data_context = {'posts':posts}
 
-        return render_to_response('posts-tags.html', request_context)
+        return render(request,'posts-tags.html', data_context)
 
     def post(self, request, tags):
 
@@ -63,6 +62,6 @@ class PostView(View):
 
         form.anti_spam()
 
-        request_context = RequestContext(request,{'post':post,'form':form})
+        data_context = {'post':post,'form':form}
 
-        return render_to_response(post.template, request_context)
+        return render(request, post.template, data_context)
